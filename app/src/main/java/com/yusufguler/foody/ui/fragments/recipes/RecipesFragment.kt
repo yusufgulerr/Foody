@@ -10,8 +10,10 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yusufguler.foody.API_KEY
+import com.yusufguler.foody.R
 import com.yusufguler.foody.viewmodels.MainViewModel
 import com.yusufguler.foody.adapters.RecipesAdapter
 import com.yusufguler.foody.data.Repository
@@ -51,6 +53,9 @@ class RecipesFragment : Fragment() {
 
         readDatabase()
 
+        binding.recipesFab.setOnClickListener {
+            findNavController().navigate(R.id.action_recipesFragment_to_recipesBottomSheet)
+        }
 
         return view
     }
@@ -110,8 +115,6 @@ class RecipesFragment : Fragment() {
             }
         }
     }
-
-
 
     private fun showShimmerEfect() {
         binding.shimmerFrameLayout.startShimmer()
