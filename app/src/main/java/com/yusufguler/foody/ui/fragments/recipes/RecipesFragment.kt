@@ -19,25 +19,31 @@ import com.yusufguler.foody.viewmodels.MainViewModel
 import com.yusufguler.foody.adapters.RecipesAdapter
 import com.yusufguler.foody.data.Repository
 import com.yusufguler.foody.databinding.FragmentRecipesBinding
+import com.yusufguler.foody.util.NetworkListener
 import com.yusufguler.foody.util.NetworkResult
 import com.yusufguler.foody.util.observeOnce
 import com.yusufguler.foody.viewmodels.RecipesViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @AndroidEntryPoint
 class RecipesFragment : Fragment() {
 
     private val args by navArgs<RecipesFragmentArgs>()
+    private var _binding: FragmentRecipesBinding? = null
 
+    private val binding get() = _binding!!
 
     private lateinit var mainViewModel: MainViewModel
     private lateinit var recipesViewModel: RecipesViewModel
     private lateinit var repository: Repository
     private val mAdapter by lazy { RecipesAdapter() }
-    private var _binding: FragmentRecipesBinding? = null
 
-    private val binding get() = _binding!!
+    private lateinit var networkListener: NetworkListener
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainViewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
@@ -54,10 +60,28 @@ class RecipesFragment : Fragment() {
         val view = binding.root
         setUpRecyclerView()
 
-        readDatabase()
+        recipesViewModel.readBackOnline.observe(viewLifecycleOwner){
+            recipesViewModel.backOnline = it
+        }
+
+
+        lifecycleScope.launch {
+            networkListener = NetworkListener()
+            networkListener.checkNetworkAvailability(requireContext())
+                .collect{status->
+                    Log.d("NetworkListener",status.toString())
+                    recipesViewModel.networkStatus = status
+                    recipesViewModel.showNetworkStatus()
+                    readDatabase()
+                }
+        }
 
         binding.recipesFab.setOnClickListener {
-            findNavController().navigate(R.id.action_recipesFragment_to_recipesBottomSheet)
+            if(recipesViewModel.networkStatus){
+                findNavController().navigate(R.id.action_recipesFragment_to_recipesBottomSheet)
+            }else{
+                recipesViewModel.showNetworkStatus()
+            }
         }
 
         return view
@@ -73,7 +97,7 @@ class RecipesFragment : Fragment() {
             mainViewModel.readRecipes.observeOnce(viewLifecycleOwner) { database ->
                 if (database.isNotEmpty() && !args.backFromBottomSheet) {
                     Log.d("Recipes Fragment", "readDataBase called!!")
-                    mAdapter.setData(database[0].foodRecipe)
+                    mAdapter.setData(database.first().foodRecipe)
                     hideShimmerEffect()
                 } else {
                     requesApiData()

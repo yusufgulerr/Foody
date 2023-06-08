@@ -64,14 +64,14 @@ class MainViewModel@Inject constructor(
     }
 
     private fun handleRecipesResponse(response: Response<FoodRecipe>): NetworkResult<FoodRecipe>? {
-        when{
+        when {
             response.message().toString().contains("timeout") -> {
                 return NetworkResult.Error("Timeout")
             }
             response.code() == 402 -> {
                 return NetworkResult.Error("API Key Limited.")
             }
-            response.body()!!.results.isNullOrEmpty() ->{
+            response.body()!!.results.isEmpty() -> {
                 return NetworkResult.Error("Recipes not found.")
             }
             response.isSuccessful -> {
