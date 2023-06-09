@@ -1,21 +1,15 @@
 package com.yusufguler.foody.data
 
 import android.content.Context
-import android.health.connect.datatypes.MealType
 import androidx.datastore.core.DataStore
-import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.IOException
-import androidx.datastore.dataStore
-import androidx.datastore.dataStoreFile
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.PreferencesSerializer
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.datastore.preferences.preferencesDataStoreFile
 import com.yusufguler.foody.util.Constants.DEFAULT_DIET_TYPE
 import com.yusufguler.foody.util.Constants.DEFAULT_MEAL_TYPE
 import com.yusufguler.foody.util.Constants.PREFERENCES_BACK_ONLINE
@@ -25,7 +19,6 @@ import com.yusufguler.foody.util.Constants.PREFERENCES_MEAL_TYPE
 import com.yusufguler.foody.util.Constants.PREFERENCES_MEAL_TYPE_ID
 import com.yusufguler.foody.util.Constants.PREFERENCES_NAME
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.android.scopes.ActivityRetainedScoped
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -44,7 +37,7 @@ class DataStoreRepository @Inject constructor(
         val selectedMealTypeId = intPreferencesKey(PREFERENCES_MEAL_TYPE_ID)
         val selectedDietType = stringPreferencesKey(PREFERENCES_DIET_TYPE)
         val selectedDietTypeId = intPreferencesKey(PREFERENCES_DIET_TYPE_ID)
-        val backOnlince = booleanPreferencesKey(PREFERENCES_BACK_ONLINE)
+        val backOnline = booleanPreferencesKey(PREFERENCES_BACK_ONLINE)
     }
 
     private val dataStore: DataStore<Preferences> = context.dataStore
@@ -64,7 +57,7 @@ class DataStoreRepository @Inject constructor(
 
     suspend fun saveBackOnline(backOnline:Boolean){
         dataStore.edit {preferences->
-            preferences[PreferencesKeys.backOnlince] = backOnline
+            preferences[PreferencesKeys.backOnline] = backOnline
         }
     }
 
@@ -99,7 +92,7 @@ class DataStoreRepository @Inject constructor(
             }
         }
         .map {preferences->
-            val backOnline = preferences[PreferencesKeys.backOnlince] ?: false
+            val backOnline = preferences[PreferencesKeys.backOnline] ?: false
             backOnline
         }
 }
