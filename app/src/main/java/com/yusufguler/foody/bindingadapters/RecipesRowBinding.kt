@@ -13,11 +13,13 @@ import coil.load
 import com.yusufguler.foody.R
 import com.yusufguler.foody.models.Result
 import com.yusufguler.foody.ui.fragments.recipes.RecipesFragmentDirections
+import org.jsoup.Jsoup
 import java.lang.Exception
 
 class RecipesRowBinding {
 
     companion object {
+
         @BindingAdapter("onRecipeClickListener")
         @JvmStatic
         fun onRecipeClickListener(recipeRowLayout:ConstraintLayout,result:Result){
@@ -74,6 +76,17 @@ class RecipesRowBinding {
                     }
                 }
             }
+
+        }
+        @BindingAdapter("parseHTML")
+        @JvmStatic
+        fun parseHTML(textView:TextView,description:String?){
+            if(description != null){
+                val desc = Jsoup.parse(description).text()
+                textView.text = desc
+
+            }
         }
     }
+
 }
