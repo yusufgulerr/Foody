@@ -16,6 +16,7 @@ import com.yusufguler.foody.databinding.ActivityDetailsBinding
 import com.yusufguler.foody.ui.fragments.ingredients.IngredientsFragment
 import com.yusufguler.foody.ui.fragments.instructions.InstructionsFragment
 import com.yusufguler.foody.ui.fragments.overview.OverviewFragment
+import com.yusufguler.foody.util.Constants.RECIPE_RESULT_KEY
 
 class DetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailsBinding
@@ -39,7 +40,7 @@ class DetailsActivity : AppCompatActivity() {
         titles.add("Instructions")
 
         val resultBundle = Bundle()
-        resultBundle.putParcelable("recipeBundle", args.result)
+        resultBundle.putParcelable(RECIPE_RESULT_KEY, args.result)
 
         val pagerAdapter = PagerAdapter(
             resultBundle,

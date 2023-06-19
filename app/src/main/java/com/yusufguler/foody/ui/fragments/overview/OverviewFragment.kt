@@ -10,6 +10,7 @@ import coil.load
 import com.yusufguler.foody.R
 import com.yusufguler.foody.databinding.FragmentOverviewBinding
 import com.yusufguler.foody.models.Result
+import com.yusufguler.foody.util.Constants.RECIPE_RESULT_KEY
 import org.jsoup.Jsoup
 
 
@@ -29,7 +30,7 @@ class OverviewFragment : Fragment() {
 
         val args = arguments
 
-        val myBundle: Result? = args?.getParcelable("recipeBundle")
+        val myBundle: Result? = args?.getParcelable(RECIPE_RESULT_KEY)
 
         binding.mainImageView.load(myBundle?.image)
         binding.titleTextView.text = myBundle?.title
