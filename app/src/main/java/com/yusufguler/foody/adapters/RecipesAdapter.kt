@@ -49,4 +49,5 @@ class RecipesAdapter : RecyclerView.Adapter<RecipesAdapter.MyViewHolder>() {
         recipes = newData.results
         diffUtilResult.dispatchUpdatesTo(this)
     }
+
 }

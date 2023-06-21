@@ -198,10 +198,7 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
 
 
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+
 
     override fun onQueryTextSubmit(query: String?): Boolean {
        if(query!= null){
@@ -224,5 +221,8 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
         binding.shimmerFrameLayout.visibility = View.GONE
         binding.recyclerview.visibility = View.VISIBLE
     }
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
