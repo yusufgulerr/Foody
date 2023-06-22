@@ -20,14 +20,14 @@ class FavoriteRecipesFragment : Fragment() {
     private var _binding: FragmentFavoriteRecipesBinding? = null
 
     private val binding get() = _binding!!
-
+    private val mainViewModel: MainViewModel by viewModels()
     private val mAdapter: FavoritesRecipesAdapter by lazy {
         FavoritesRecipesAdapter(
             requireActivity(),
             mainViewModel
         )
     }
-    private val mainViewModel: MainViewModel by viewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,5 +53,6 @@ class FavoriteRecipesFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        mAdapter.clearContextualActionMode()
     }
 }
